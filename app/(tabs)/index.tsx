@@ -4,7 +4,7 @@ import { Link } from 'expo-router';
 export default function HomePage() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to My App 👋</Text>
+      <Text style={styles.title}>Hello Hama 👋</Text>
       <Text style={styles.subtitle}>Choose an option</Text>
 
       <Link href="/members" asChild>

@@ -24,6 +24,7 @@ type Person = {
   paid: boolean;
   notificationId?: string;
   notified?: boolean;
+  
 };
 
 export default function GymApp() {

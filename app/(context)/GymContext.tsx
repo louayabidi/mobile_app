@@ -1,19 +1,25 @@
-// app/(context)/GymContext.tsx (Moved to grouped folder to avoid routing issues)
+// app/(context)/GymContext.tsx
 import { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 
-// Type for a gym member
+type Payment = {
+  id: string;
+  date: string;        // YYYY-MM-DD when they paid
+  paidUntil: string;   // Their endDate at time of payment
+};
+
 type Person = {
   id: string;
   name: string;
   surname: string;
   age: string;
-  startDate: string; // YYYY-MM-DD
-  endDate: string; // YYYY-MM-DD
+  startDate: string;
+  endDate: string;
   paid: boolean;
   notificationId?: string;
   notified?: boolean;
+  payments: Payment[];  // ← NEW: Full payment history
 };
 
 type GymContextType = {
@@ -37,6 +43,8 @@ export function GymProvider({ children }: { children: React.ReactNode }) {
       const stored = await AsyncStorage.getItem(STORAGE_KEY);
       if (stored) {
         let parsed = JSON.parse(stored);
+        // Migrate old data to include payments array
+        parsed = parsed.map((p: any) => ({ ...p, payments: p.payments || [] }));
         const fixed = await verifyAndFixNotifications(parsed);
         setPeople(fixed);
       }
@@ -57,8 +65,8 @@ export function GymProvider({ children }: { children: React.ReactNode }) {
 
   const scheduleExpirationNotification = async (person: Person) => {
     const end = new Date(person.endDate);
-    const triggerDate = new Date(end.getTime() + 86400000); // next day
-    triggerDate.setHours(9, 0, 0, 0); // 9 AM
+    const triggerDate = new Date(end.getTime() + 86400000);
+    triggerDate.setHours(9, 0, 0, 0);
     const now = new Date();
     if (triggerDate <= now) return null;
     const seconds = Math.floor((triggerDate.getTime() - now.getTime()) / 1000);
@@ -67,11 +75,7 @@ export function GymProvider({ children }: { children: React.ReactNode }) {
         title: "Subscription Expired!",
         body: `${person.name} ${person.surname}'s subscription has expired.`,
       },
-      trigger: { 
-        type: 'timeInterval',
-        seconds,
-        repeats: false, 
-      }
+      trigger: { seconds, repeats: false },
     });
     return identifier;
   };
@@ -108,26 +112,19 @@ export function GymProvider({ children }: { children: React.ReactNode }) {
     return updatedPeople;
   };
 
-  useEffect(() => {
-    loadPeople();
-  }, []);
-
-  useEffect(() => {
-    savePeople();
-  }, [people]);
+  useEffect(() => { loadPeople(); }, []);
+  useEffect(() => { savePeople(); }, [people]);
 
   return (
-    <GymContext.Provider
-      value={{
-        people,
-        setPeople,
-        loadPeople,
-        savePeople,
-        isExpired,
-        scheduleExpirationNotification,
-        verifyAndFixNotifications,
-      }}
-    >
+    <GymContext.Provider value={{
+      people,
+      setPeople,
+      loadPeople,
+      savePeople,
+      isExpired,
+      scheduleExpirationNotification,
+      verifyAndFixNotifications,
+    }}>
       {children}
     </GymContext.Provider>
   );
