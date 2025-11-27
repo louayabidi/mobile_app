@@ -12,12 +12,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.louay.gymapp",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       }
     },
     "android": {
       "package": "com.louay.gymapp",
-      "googleServicesFile": "./android/app/google-services.json",
+     "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -71,6 +73,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "fc27386e-c542-4a7d-b60a-244bc042005e"
+      }
     }
   }
 }
