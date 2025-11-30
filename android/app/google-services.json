@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "150517018312",
+    "project_id": "medworkout",
+    "storage_bucket": "medworkout.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150517018312:android:893777d70def7b16247ffd",
+        "android_client_info": {
+          "package_name": "com.louay.gymapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfcATzq63PEjgJXiJluo8-9mL1NsrreOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
